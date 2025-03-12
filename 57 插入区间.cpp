@@ -46,3 +46,41 @@ public:
         return res;
     }
 };
+
+
+##这个是应该的版本
+#include <vector>
+#include <string>
+using namespace std;
+
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<string> res; // ✅ 结果容器应为字符串向量
+        int n = nums.size();
+        if (n == 0) return res;
+
+        int begin = nums[0];
+        int end = nums[0];
+
+        for (int i = 1; i <= n; ++i) { // ✅ 包含 i == n 以处理最后一个区间
+            if (i < n && nums[i] == end + 1) {
+                // 当前元素连续，扩展区间
+                end = nums[i];
+            } else {
+                // 添加当前区间
+                if (begin == end) {
+                    res.push_back(to_string(begin));
+                } else {
+                    res.push_back(to_string(begin) + "->" + to_string(end));
+                }
+                // 重置区间起点（需检查 i < n）
+                if (i < n) {
+                    begin = nums[i];
+                    end = nums[i];
+                }
+            }
+        }
+        return res;
+    }
+};
