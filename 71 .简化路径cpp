@@ -1,0 +1,57 @@
+class Solution {
+public:
+    string simplifyPath(string path) {
+        path+='/';
+        string res;
+        int len = path.size();
+        if(len == 1){
+            return "/";
+        }
+        vector<string> name;
+        string cur = "";
+        bool flag = false;
+        for(int i = 0; i < len; i++){
+            if(path[i] == '/'){
+                if(flag){
+                    name.push_back(cur);
+                    cur = "";
+                    flag = false;
+                }
+            }else{
+                cur+=path[i];
+                flag = true;
+            }
+        }
+        stack<string> st;
+        for(auto i : name){
+            st.push(i);
+        }
+        int cnt = 0;
+        stack<string> resst;
+        while(!st.empty()){
+            if(st.top() == ".."){
+                cnt++;
+                st.pop();
+            }else if(st.top() == "."){
+                st.pop();
+            }else{
+                if(cnt!=0){
+                    st.pop();
+                    cnt--;
+                }else{
+                    resst.push(st.top());
+                    st.pop();
+                }
+            }
+        }
+        while(!resst.empty()){
+            res+='/';
+            res+=resst.top();
+            resst.pop();
+        }
+        if(res == ""){
+            return "/";
+        }
+    return res;
+    }
+};
